@@ -34,8 +34,10 @@ export default ()=>({
                 ...(successes !== undefined ? { successes } : {}),
                 ...(target !== undefined ? { target } : {}),
             };
-            const pool = new Pool(args);
+
             try {
+                const pool = new Pool(args);
+
                 let result = pool.roll();
 
                 const displayName = interaction.member?.displayName ?? interaction.user.username;
@@ -58,6 +60,7 @@ export default ()=>({
                     response += `\nand a target of ${pool.target}`;
                 }
                 response += `\n\nDice rolled: ${pool.diceRolled.join(", ")}`;
+                response += `\nThis roll was a ${pool.succceeded?"success":"failure"}`;
 
 
                 interaction.reply({
@@ -65,7 +68,8 @@ export default ()=>({
                 });
             } catch (e) {
                 interaction.reply({
-                    "content":"Please don't pull the piss with the amount of dice you're trying to roll."
+                    "content":e.message,
+                    flags: MessageFlags.Ephemeral
                 });
             }
         }

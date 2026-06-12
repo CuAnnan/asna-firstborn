@@ -5,6 +5,13 @@ class DenisException extends Error {
     }
 }
 
+class InvalidPoolException extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'InvalidPoolException';
+    }
+}
+
 class Pool {
     constructor({dice, internalPenalties, externalPenalties, successes, difficulty, target}) {
         const parseIntOrDefault = (val, def = 0) => {
@@ -20,11 +27,20 @@ class Pool {
             throw new DenisException("You can't roll more than 100 dice at once");
         }
         this.internalPenalties = parseIntOrDefault(internalPenalties, 0);
+
+        if(this.internalPenalties >= this.dice)
+        {
+            throw new InvalidPoolException("Internal penalties must be lower than the number of dice you're rolling");
+        }
+        this.dice -= this.internalPenalties;
+
+
         this.externalPenalties = parseIntOrDefault(externalPenalties, 0);
         this.successes = parseIntOrDefault(successes, 0);
         this.difficulty = parseIntOrDefault(difficulty, 0);
         this.results = null;
         this.diceRolled = [];
+        this.succceeded = false;
 
         if (target !== undefined && target !== null) {
             const t = Number(target);
@@ -42,6 +58,7 @@ class Pool {
         if (this.results) {
             return this.results;
         }
+
         let result = 0;
         for (let i = 0; i < this.dice; i++) {
             const roll = Math.floor(Math.random() * 10) + 1;
@@ -53,7 +70,12 @@ class Pool {
                 result++;
             }
         }
+        result -= this.externalPenalties;
+        result += this.successes;
+        result = Math.max(-1, result);
         this.results = result;
+        this.succceeded = result >= this.difficulty;
+
         return this.results;
     }
 }
