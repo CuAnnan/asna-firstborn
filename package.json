@@ -1,0 +1,17 @@
+{
+  "name": "asna",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "deployCommands": "node deployCommands.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "discord.js": "^14.26.4"
+  }
+}
