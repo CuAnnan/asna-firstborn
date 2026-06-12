@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import fs from 'fs';
 import path from 'path';
 import {Client, Collection, Events, GatewayIntentBits, MessageFlags} from "discord.js";
@@ -25,7 +25,10 @@ for (const folder of commandFolders) {
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
         console.log(`[INFO] Adding command at ${filePath}`)
-        const module = await import(filePath);
+        // When running on Windows `filePath` is an absolute path like "C:\\...".
+        // The ESM loader requires a file:// URL for absolute paths, so convert
+        // using pathToFileURL to avoid ERR_UNSUPPORTED_ESM_URL_SCHEME.
+        const module = await import(pathToFileURL(filePath).href);
         const command = module.default();
         // Set a new item in the Collection with the key as the command name and the value as the exported module
         if ('data' in command && 'execute' in command) {
