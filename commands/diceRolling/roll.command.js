@@ -66,7 +66,7 @@ export default ()=>({
                 const embed = new EmbedBuilder()
                     .setTitle(`${displayName} — Dice Roll`)
                     .setColor(pool.succceeded ? 0x57F287 : 0xED4245) // green on success, red on failure
-                    .setDescription(`**${result}** successes — ${pool.succceeded ? '✅ Success' : '❌ Failure'}`)
+                    .setDescription(`**${result}** successes — ${pool.succceeded ? 'Success' : 'Failure'}`)
                     .addFields(
                         { name: 'Pool', value: `${pool.dice} d10`, inline: true },
                         { name: 'Target', value: `${pool.target ?? '8'}`, inline: true },
