@@ -1,4 +1,4 @@
-import {SlashCommandBuilder, MessageFlags} from 'discord.js';
+import {SlashCommandBuilder, MessageFlags, EmbedBuilder} from 'discord.js';
 import Pool from "../../Model/Dice/Pool.js";
 
 export default ()=>({
@@ -21,11 +21,28 @@ export default ()=>({
             });
             return;
         }
-        const poolRegex = /^(\d+)(?:d(\d+))?(?:i(\d+))?(?:e(\d+))?(?:s(\d+))?(?:t(\d+))?$/;
+        // Accept an initial dice count followed by any modifiers in any order, e.g. "6d2e1i2s3" or "6i2e1d2s3"
+        const poolRegex = /^(\d+)((?:[deist]\d+)*)$/;
         const match = pool.match(poolRegex);
 
         if (match) {
-            const [, dice, difficulty, internalPenalties, externalPenalties, successes, target] = match;
+            const dice = match[1];
+            const modifiersStr = match[2] || '';
+
+            // Parse modifiers (letter+number) in any order
+            let difficulty, internalPenalties, externalPenalties, successes, target;
+            const modRegex = /([deist])(\d+)/g;
+            let m;
+            while ((m = modRegex.exec(modifiersStr)) !== null) {
+                const [, key, val] = m;
+                const n = Number(val);
+                if (key === 'd') difficulty = n;
+                else if (key === 'i') internalPenalties = n;
+                else if (key === 'e') externalPenalties = n;
+                else if (key === 's') successes = n;
+                else if (key === 't') target = n;
+            }
+
             let args = {
                 dice,
                 ...(difficulty !== undefined ? { difficulty } : {}),
@@ -41,31 +58,31 @@ export default ()=>({
                 let result = pool.roll();
 
                 const displayName = interaction.member?.displayName ?? interaction.user.username;
-                let response = `${displayName} rolled ${result} successes on their pool of ${pool.dice}`;
-                if (pool.difficulty >= undefined) {
-                    response += `\nagainst a difficulty of ${pool.difficulty}`;
-                }
-                if (pool.internalPenalties || pool.externalPenalties) {
-                    response += `\nwith `;
-                    const penalties = [];
-                    if (pool.internalPenalties) {
-                        penalties.push(`an internal penalty of ${pool.internalPenalties}`);
-                    }
-                    if (pool.externalPenalties) {
-                        penalties.push(`an external penalty of ${pool.externalPenalties}`);
-                    }
-                    response += penalties.join(" and ");
-                }
-                if (pool.target < 8) {
-                    response += `\nand a target of ${pool.target}`;
-                }
-                response += `\n\nDice rolled: ${pool.diceRolled.join(", ")}`;
-                response += `\nThis roll was a ${pool.succceeded?"success":"failure"}`;
+                // Build a rich embed for the roll results
+                const penalties = [];
+                if (pool.internalPenalties) penalties.push(`Internal: ${pool.internalPenalties}`);
+                if (pool.externalPenalties) penalties.push(`External: ${pool.externalPenalties}`);
 
+                const embed = new EmbedBuilder()
+                    .setTitle(`${displayName} — Dice Roll`)
+                    .setColor(pool.succceeded ? 0x57F287 : 0xED4245) // green on success, red on failure
+                    .setDescription(`**${result}** successes — ${pool.succceeded ? '✅ Success' : '❌ Failure'}`)
+                    .addFields(
+                        { name: 'Pool', value: `${pool.dice} d10`, inline: true },
+                        { name: 'Target', value: `${pool.target ?? '8'}`, inline: true },
+                        { name: 'Difficulty', value: `${pool.difficulty ?? '0'}`, inline: true },
+                    )
+                    .addFields(
+                        { name: 'Penalties', value: penalties.length ? penalties.join(' / ') : 'None', inline: true },
+                        { name: 'Bought Successes', value: `${pool.successes ?? 0}`, inline: true },
+                        { name: 'Outcome', value: pool.succceeded ? 'Success' : 'Failure', inline: true }
+                    )
+                    .addFields({ name: 'Dice Rolled', value: pool.diceRolled.length ? pool.diceRolled.join(', ') : 'None' })
+                    .setFooter({ text: `Rolled by ${displayName}` })
+                    .setTimestamp();
 
-                interaction.reply({
-                    content: response
-                });
+                // Reply with the embed
+                interaction.reply({ embeds: [embed] });
             } catch (e) {
                 interaction.reply({
                     "content":e.message,
