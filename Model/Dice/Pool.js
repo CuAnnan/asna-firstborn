@@ -78,6 +78,12 @@ class Pool {
 
         return this.results;
     }
+
+    reroll()
+    {
+        this.results = null;
+        return this.roll();
+    }
 }
 
 export default Pool;
