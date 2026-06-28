@@ -40,7 +40,7 @@ class Pool {
         this.difficulty = parseIntOrDefault(difficulty, 0);
         this.results = null;
         this.diceRolled = [];
-        this.succceeded = false;
+        this.succeeded = false;
 
         if (target !== undefined && target !== null) {
             const t = Number(target);
@@ -74,7 +74,7 @@ class Pool {
         result += this.successes;
         result = Math.max(-1, result);
         this.results = result;
-        this.succceeded = result >= this.difficulty;
+        this.succeeded = result >= this.difficulty;
 
         return this.results;
     }
