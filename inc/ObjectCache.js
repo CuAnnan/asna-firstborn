@@ -86,8 +86,8 @@ class ObjectCache
 
     constructor(maxTTL = MAX_TTL_DEFAULT, timerDuration = TIMER_DURATION_DEFAULT)
     {
-        this.maxTTL = parseInt(maxTTL);
-        this.timerDuration = parseInt(timerDuration);
+        this.maxTTL = Number(maxTTL);
+        this.timerDuration = Number(timerDuration);
         this.#timeout = setTimeout(()=>{this.checkCache();}, this.timerDuration);
     }
 
@@ -164,21 +164,6 @@ class ObjectCache
             return this.cache[key].entry;
         }
         return null;
-    }
-
-    /**
-     * This adds a second reference to the cache's dictionary with a different key, allowing the same instance to be referenced by multiple keys.
-     * @param keyToLink
-     * @param keyToLinkAs
-     */
-    link(keyToLink, keyToLinkAs)
-    {
-        if(this.cache[keyToLink] !== undefined)
-        {
-            this.cache[keyToLink].refresh();
-            this.cache[keyToLinkAs] = this.cache[keyToLink];
-        }
-        this.size++;
     }
 
     /**

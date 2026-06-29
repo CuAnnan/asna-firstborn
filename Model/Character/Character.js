@@ -27,6 +27,35 @@ class Character {
         };
         this.initiative = 1;
         this.calculateEssencePools();
+
+    }
+
+    toJSON(){
+        return {
+            permanentEssence:this.permanentEssence,
+            permanentWillpower:this.permanentWillpower,
+            penalties:this.penalties,
+            virtues:this.virtues,
+            extraEssence:this.extraEssence,
+            initiative:this.initiative,
+            essencePools:this.essencePools,
+        }
+    }
+
+    static fromJSON(json){
+        let c = new Character();
+        c.permanentEssence = json.permanentEssence;
+        c.permanentWillpower = json.permanentWillpower;
+        c.penalties = json.penalties;
+        c.virtues = json.virtues;
+        c.extraEssence = json.extraEssence;
+        c.initiative = json.initiative;
+        c.calculateEssencePools();
+        c.essencePools.personal.committed = json.essencePools.personal.committed;
+        c.essencePools.peripheral.committed = json.essencePools.peripheral.committed;
+        c.essencePools.personal.spent = json.essencePools.personal.spent;
+        c.essencePools.peripheral.spent = json.essencePools.peripheral.spent;
+        return c;
     }
 
     calculateEssencePools() {
@@ -36,6 +65,7 @@ class Character {
             personal: {total: totalPersonal, spent: 0, committed:0},
             peripheral: {total: totalPeripheral, spent: 0, committed: 0}
         };
+
     }
 
     get remainingEssence()
@@ -54,9 +84,14 @@ class Character {
         this.initiative = initiative;
     }
 
-    setExtraEssence(extraEssence)
+    setExtraEssence({pool, amount})
     {
-        this.extraEssence = extraEssence;
+        pool = pool?.toLowerCase();
+        if(!(pool in this.extraEssence))
+        {
+            pool = "peripheral";
+        }
+        this.extraEssence[pool] = amount;
         this.calculateEssencePools();
     }
 

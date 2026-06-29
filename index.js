@@ -1,18 +1,19 @@
 import { fileURLToPath, pathToFileURL } from 'url';
 import fs from 'fs';
 import path from 'path';
-import {Client, Collection, Events, GatewayIntentBits, MessageFlags} from "discord.js";
+import pkg from 'discord.js';
+const {Client, Collection, Events, GatewayIntentBits, MessageFlags} = pkg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import conf from './conf.js'
+import MongoConnectionFactory from "./inc/MongoConnectionFactory.js";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once(Events.ClientReady, (readyClient) => {
     console.log(`[INFO] Ready! Logged in as ${readyClient.user.tag}`);
 });
-
 
 client.commands = new Collection();
 
@@ -63,3 +64,11 @@ console.log('[INFO] Finished adding command listener');
 console.log('[INFO] Logging in to Discord');
 await client.login(conf.discord.secrets.token);
 console.log('[INFO] Logged in to Discord');
+
+console.log('[INFO] Raising the Mongo Instance');
+MongoConnectionFactory.init(conf).then(()=>{
+    console.log('[INFO] Mongo Instance raised');
+}).catch(err=>{
+    console.error('[ERROR] Failed to raise Mongo Instance', err);
+});
+console.log('[INFO] Finished starting the bot');

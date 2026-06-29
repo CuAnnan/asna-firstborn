@@ -1,5 +1,6 @@
 import {MessageFlags, SlashCommandBuilder} from "discord.js";
 import getCharacter from "../../inc/getCharacter.js";
+import updateCharacter from "../../inc/updateCharacter.js";
 
 
 export default function() {
@@ -18,7 +19,7 @@ export default function() {
                 const motes = interaction.options.getInteger('motes');
                 const character = await getCharacter(interaction);
                 character.spendEssence({motes});
-                console.log(character);
+                await updateCharacter(interaction, character);
                 interaction.reply({
                     "content": `You have spent ${motes} motes. You now have ${character.remainingEssence.personal} personal motes and ${character.remainingEssence.peripheral} peripheral motes remaining.`,
                     flags: MessageFlags.Ephemeral

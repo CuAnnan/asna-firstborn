@@ -1,6 +1,6 @@
 import {MessageFlags, SlashCommandBuilder} from "discord.js";
 import getCharacter from "../../inc/getCharacter.js";
-
+import updateCharacter from "../../inc/updateCharacter.js";
 
 export default function() {
     return {
@@ -18,7 +18,7 @@ export default function() {
                 const level = interaction.options.getInteger('level');
                 const character = await getCharacter(interaction);
                 character.setPermanentWillpower(level);
-                console.log(character);
+                await updateCharacter(interaction, character);
                 interaction.reply({
                     "content": `Your permanent willpower has been set to ${level}`,
                     flags: MessageFlags.Ephemeral

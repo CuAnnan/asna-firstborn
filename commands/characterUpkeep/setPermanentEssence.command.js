@@ -1,5 +1,6 @@
 import {MessageFlags, SlashCommandBuilder} from "discord.js";
 import getCharacter from "../../inc/getCharacter.js";
+import updateCharacter from "../../inc/updateCharacter.js";
 
 
 export default function() {
@@ -18,7 +19,7 @@ export default function() {
                 const level = interaction.options.getInteger('level');
                 const character = await getCharacter(interaction);
                 character.setPermanentEssence(level);
-                console.log(character);
+                await updateCharacter(interaction, character);
                 interaction.reply({
                     "content": `Your permanent essence has been set to ${level}`,
                     flags: MessageFlags.Ephemeral
