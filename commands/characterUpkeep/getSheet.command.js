@@ -1,17 +1,16 @@
 import {EmbedBuilder, MessageFlags, SlashCommandBuilder} from "discord.js";
 import getCharacter from "../../inc/getCharacter.js";
-import updateCharacter from "../../inc/updateCharacter.js";
 
 function getVirtueDots(level, max=5)
 {
     let dots = "";
     for(let i = 0; i < level; i++)
     {
-        dots += "⬤";
+        dots += "●";
     }
     for(let i = level; i < max; i++)
     {
-        dots += "⭘";
+        dots += "○";
     }
     return dots;
 }
