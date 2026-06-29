@@ -9,9 +9,7 @@ export default ()=> {
         ,
         async execute(interaction) {
             try {
-                const motes = interaction.options.getInteger('motes');
                 const character = await getCharacter(interaction);
-                console.log(character);
                 interaction.reply({
                     "content": `You currently have ${character.remainingEssence.personal} personal motes and ${character.remainingEssence.peripheral} peripheral motes remaining.`,
                     flags: MessageFlags.Ephemeral

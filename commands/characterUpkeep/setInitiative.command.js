@@ -18,7 +18,6 @@ export default function() {
                 const level = interaction.options.getInteger('level');
                 const character = await getCharacter(interaction);
                 character.setInitiative(level);
-                console.log(character);
                 interaction.reply({
                     "content": `Your initiative has been set to ${level}`,
                     flags: MessageFlags.Ephemeral

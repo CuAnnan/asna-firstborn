@@ -188,22 +188,17 @@ class Character {
 
     spendEssence({pool, motes})
     {
-        console.log(`Spending ${motes} from ${pool} pool`);
         pool = pool?pool:"personal";
         this.readyCheck();
         this.validateEssencePool({pool, motes});
 
         let secondaryPool = pool === "personal" ? "peripheral" : "personal";
-        console.log(`Spending ${motes} from ${pool} pool`);
 
         let remaining = motes;
         while(remaining > 0)
         {
-            console.log(this.essencePools[pool]);
             const n = Math.min(remaining, this.remainingEssence[pool]);
-            console.log(`Spent ${n} from ${pool} pool`);
             this.essencePools[pool].spent += n;
-            console.log(this.essencePools[pool]);
             remaining -= n;
             pool = secondaryPool;
         }
