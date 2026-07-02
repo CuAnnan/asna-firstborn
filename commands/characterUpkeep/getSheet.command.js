@@ -48,7 +48,7 @@ function getEmbedForCharacter(character) {
             {name:"Committed", value:""+character.essencePools.peripheral.committed, inline:true},
             {name:"Remanining", value:""+(character.essencePools.peripheral.total - character.essencePools.peripheral.spent - character.essencePools.peripheral.committed), inline:true}
         )
-        .addFields({name:"Initiative:", value:""+character.initiative})
+        .addFields({name:"Join Battle:", value:""+character.initiative})
         .setTimestamp();
 }
 

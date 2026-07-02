@@ -6,12 +6,12 @@ import updateCharacter from "#inc/updateCharacter.js";
 export default function() {
     return {
         data: new SlashCommandBuilder()
-            .setName('set-initiative')
+            .setName('set-join-battle')
             .setDescription("Set your initiative")
             .addIntegerOption(option =>
                 option
-                    .setName('level')
-                    .setDescription("The level you want set your initiative to")
+                    .setName('join-battle-score')
+                    .setDescription("The level you want set your join battle score to")
                     .setRequired(true)
             ),
         async execute(interaction) {
@@ -21,7 +21,7 @@ export default function() {
                 character.setInitiative(level);
                 await updateCharacter(interaction, character);
                 interaction.reply({
-                    "content": `Your initiative has been set to ${level}`,
+                    "content": `Your join battle score has been set to ${level}`,
                     flags: MessageFlags.Ephemeral
                 });
             } catch (err) {

@@ -149,21 +149,21 @@ class Character {
         return this.virtues.conviction > 0 && this.virtues.courage > 0 && this.virtues.valor > 0 && this.virtues.temperance > 0;
     }
 
-    getInitiativePool({successes})
+    getInitiativePool({successes, extraDice})
     {
         //{dice, internalPenalties, externalPenalties, successes, difficulty, target}
         return {
-            dice:this.initiative,
+            dice:this.initiative + extraDice,
             internalPenalties:this.penalties.internal,
             externalPenalties:this.penalties.external,
             successes
         };
     }
 
-    rollInitiative({successes})
+    rollInitiative({successes=0, extraDice=0})
     {
         this.readyCheck();
-        const pool = new Pool(this.getInitiativePool({successes}));
+        const pool = new Pool(this.getInitiativePool({successes, extraDice}));
         return pool.roll();
     }
 

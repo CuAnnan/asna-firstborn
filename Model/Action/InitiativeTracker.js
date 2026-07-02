@@ -1,4 +1,5 @@
 import Pool from "#Model/Dice/Pool.js";
+import ObjectCache from "#inc/ObjectCache.js";
 
 class InitiativeTracker {
     /**
@@ -10,6 +11,7 @@ class InitiativeTracker {
     joinBattleRolls;
     highestJoinBattleRoll;
     ticks;
+    characterInitiatives;
 
     constructor() {
         this.characters = [];
@@ -18,6 +20,7 @@ class InitiativeTracker {
         this.joinBattleRolls = {};
         this.highestJoinBattleRoll = 0;
         this.ticks = [[], [], [], [], [], [], []];
+        this.characterInitiatives = new Map();
     }
 
     nextTick() {
@@ -36,6 +39,8 @@ class InitiativeTracker {
     }
 
     setCharacterInitiative(character, joinBattleRoll) {
+        this.characterInitiatives.set(character, joinBattleRoll);
+        this.addCharacter(character);
         if (this.highestJoinBattleRoll < joinBattleRoll) {
             this.highestJoinBattleRoll = joinBattleRoll;
             this.joinBattleRolls[joinBattleRoll] = [character.name];
@@ -48,6 +53,14 @@ class InitiativeTracker {
         this.joinBattleRolls[joinBattleRoll].push(character.name);
     }
 
+    getCharacterInitiative(character) {
+        if(!this.characterInitiatives.has(character))
+        {
+            return -1;
+        }
+        return this.characterInitiatives.get(character);
+    }
+
     start() {
         for (let [character, joinBattleRoll] of Object.entries(this.joinBattleRolls)) {
             let tick = this.highestJoinBattleRoll - joinBattleRoll;
@@ -58,6 +71,8 @@ class InitiativeTracker {
 
     processTick()
     {
-
+        let tickCharacters = this.ticks[this.tick];
     }
 }
+
+export default InitiativeTracker;
