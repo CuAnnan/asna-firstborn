@@ -1,5 +1,5 @@
 import {MessageFlags, SlashCommandBuilder} from "discord.js";
-import getCharacter from "../../inc/getCharacter.js";
+import getCharacter from "#inc/getCharacter.js";
 
 export default ()=> {
     return {

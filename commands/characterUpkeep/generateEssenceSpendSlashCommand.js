@@ -1,6 +1,6 @@
 import {MessageFlags, SlashCommandBuilder} from "discord.js";
-import getCharacter from "../../inc/getCharacter.js";
-import updateCharacter from "../../inc/updateCharacter.js";
+import getCharacter from "#inc/getCharacter.js";
+import updateCharacter from "#inc/updateCharacter.js";
 
 export default (pool)=> {
     pool = pool.toLowerCase();

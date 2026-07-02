@@ -2,25 +2,26 @@ import {MessageFlags, SlashCommandBuilder} from "discord.js";
 import getCharacter from "#inc/getCharacter.js";
 import updateCharacter from "#inc/updateCharacter.js";
 
-export default (virtue)=>{
+
+export default function() {
     return {
         data: new SlashCommandBuilder()
-            .setName('set-'+virtue.toLowerCase())
-            .setDescription("Set your "+virtue+" virtue")
-            .addIntegerOption(option =>
+            .setName('set-name')
+            .setDescription("Set your character's name")
+            .addStringOption(option =>
                 option
-                    .setName('level')
-                    .setDescription("The level you want set your "+virtue+" to")
+                    .setName('name')
+                    .setDescription("Your character's name")
                     .setRequired(true)
             ),
         async execute(interaction) {
             try {
-                const level = interaction.options.getInteger('level');
+                const name = interaction.options.getString('name');
                 const character = await getCharacter(interaction);
-                character.setVirtue(virtue, level);
+                character.setName(name);
                 await updateCharacter(interaction, character);
                 interaction.reply({
-                    "content": `Your ${virtue} virtue has been set to ${level}`,
+                    "content": `Your name has been set to ${name}`,
                     flags: MessageFlags.Ephemeral
                 });
             } catch (err) {

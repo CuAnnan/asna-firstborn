@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "inc/*": ["inc/*"],
+      "Model/*": ["Model/*"],
+      "commands/*": ["commands/*"],
+      "#inc/*": ["inc/*"],
+      "#Model/*": ["Model/*"],
+      "#commands/*": ["commands/*"]
+    }
+  },
+  "include": [
+    "**/*.js"
+  ]
+}

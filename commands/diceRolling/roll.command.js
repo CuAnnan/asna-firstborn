@@ -1,5 +1,5 @@
 import {SlashCommandBuilder, MessageFlags, EmbedBuilder} from 'discord.js';
-import Pool from "../../Model/Dice/Pool.js";
+import Pool from "#Model/Dice/Pool.js";
 
 const MODIFIER_KEYS = {
     d: 'difficulty',

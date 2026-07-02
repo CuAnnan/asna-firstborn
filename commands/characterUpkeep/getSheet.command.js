@@ -1,5 +1,5 @@
 import {EmbedBuilder, MessageFlags, SlashCommandBuilder} from "discord.js";
-import getCharacter from "../../inc/getCharacter.js";
+import getCharacter from "#inc/getCharacter.js";
 
 function getVirtueDots(level, max=5)
 {
@@ -16,14 +16,18 @@ function getVirtueDots(level, max=5)
 }
 
 function getEmbedForCharacter(character) {
+    if(!character) throw new Error("No character found for this user")
     return new EmbedBuilder()
         .setTitle(`Your character stats`)
+        .addFields(
+            {name:'Name', value:character?.name ?? ""}
+        )
         .addFields({ name: 'Virtues', value:"", inline:false})
         .addFields(
             {name:'Conviction', value:getVirtueDots(character.virtues.conviction), inline: true },
             {name:'Temperance', value:getVirtueDots(character.virtues.temperance), inline: true },
         )
-        .addFields({name:"", value:"", inline:false})
+        .addFields({ name: '', value: '', inline:false })
         .addFields(
             {name:'Courage', value:getVirtueDots(character.virtues.courage), inline: true },
             {name:'Valor', value:getVirtueDots(character.virtues.valor), inline:true}

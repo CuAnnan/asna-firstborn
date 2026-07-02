@@ -10,6 +10,11 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "imports": {
+    "#inc/*": "./inc/*",
+    "#Model/*": "./Model/*",
+    "#commands/*": "./commands/*"
+  },
   "description": "",
   "dependencies": {
     "discord.js": "^14.26.4",

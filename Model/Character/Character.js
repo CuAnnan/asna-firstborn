@@ -1,4 +1,4 @@
-import Pool from "../Dice/Pool.js";
+import Pool from "#Model/Dice/Pool.js";
 
 class Character {
     initiative;
@@ -7,6 +7,7 @@ class Character {
     penalties;
     virtues;
     extraEssence;
+    name;
 
     constructor() {
         this.permanentEssence = 1;
@@ -26,6 +27,7 @@ class Character {
             peripheral: 0
         };
         this.initiative = 1;
+        this.name="";
         this.calculateEssencePools();
 
     }
@@ -39,6 +41,7 @@ class Character {
             extraEssence:this.extraEssence,
             initiative:this.initiative,
             essencePools:this.essencePools,
+            name:this.name
         }
     }
 
@@ -51,12 +54,18 @@ class Character {
         c.extraEssence = json.extraEssence;
         c.initiative = json.initiative;
         c.calculateEssencePools();
+        c.name = json.name;
         c.essencePools.personal.committed = json.essencePools.personal.committed;
         c.essencePools.peripheral.committed = json.essencePools.peripheral.committed;
         c.essencePools.personal.spent = json.essencePools.personal.spent;
         c.essencePools.peripheral.spent = json.essencePools.peripheral.spent;
         return c;
     }
+
+    setName(name)
+     {
+         this.name = name;
+     }
 
     calculateEssencePools() {
         let totalPersonal = this.permanentEssence * 3 + this.permanentWillpower + this.extraEssence.personal;

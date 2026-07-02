@@ -1,6 +1,6 @@
 import ObjectCache from "./ObjectCache.js";
 import userHash from "./userHashFunction.js";
-import Character from "../Model/Character/Character.js";
+import Character from "#Model/Character/Character.js";
 import MongoConnectionFactory from "./MongoConnectionFactory.js";
 
 export default async function getCharacter(interaction) {
@@ -11,7 +11,6 @@ export default async function getCharacter(interaction) {
     if(!character) {
         const collection = db.collection("sheets");
         let characterJSON= await collection.findOne({playerHash});
-        console.log(characterJSON);
         if(characterJSON)
         {
             character = Character.fromJSON(characterJSON.character);
