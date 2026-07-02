@@ -16,7 +16,7 @@ export default function() {
             ),
         async execute(interaction) {
             try {
-                const level = interaction.options.getInteger('level');
+                const level = interaction.options.getInteger('join-battle-score');
                 const character = await getCharacter(interaction);
                 character.setInitiative(level);
                 await updateCharacter(interaction, character);
