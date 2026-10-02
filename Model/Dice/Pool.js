@@ -50,7 +50,7 @@ class Pool {
                 this.target = 7;
             }
         } else {
-            this.target = 8;
+            this.target = 7;
         }
     }
 
